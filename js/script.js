@@ -12,8 +12,9 @@ var choicesList = document.getElementById('choices-list');
 var feedbackEl = document.getElementById('feedback');
 var spanScore = document.getElementById('spanScore');
 var btnTryAgain = document.getElementById('try-again-btn');
-var btnSubmit = document.getElementById('submit-highscore-btn');
+var highscoreEl = document.getElementById('hs-form');
 var btnHome = document.getElementById('home-btn');
+var inputEl = document.getElementById("input-player-name");
 
 
 // global variables
@@ -23,7 +24,7 @@ var feedbackTime = 1
 
 // start timer function
 function countDown() {
-    secsLeft = 1
+    secsLeft = 60
     timerEl.textContent = secsLeft;
     window.timeInterval = setInterval(function() {
         secsLeft--;
@@ -109,7 +110,7 @@ btnStartEl.addEventListener('click', function(event) {
     switchPage(pgHome, pgQuestion);
     countDown(event);
     renderQuestion(currentQuestion);
-})
+});
 
 // try again button that starts the quiz again
 btnTryAgain.addEventListener('click', function(event) {
@@ -119,15 +120,44 @@ btnTryAgain.addEventListener('click', function(event) {
     switchPage(pgEndBad, pgQuestion);
     countDown(event);
     renderQuestion(currentQuestion);
-})
+});
 
 // button that sends the user to the inital home page after failing the quiz
 btnHome.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
     switchPage(pgEndBad, pgHome);
-})
+});
 
-// highscore
+var hs = [];
+
+function init() {
+    // Get stored todos from localStorage
+    var storedHS = JSON.parse(localStorage.getItem("highscores"));
+  
+    // If todos were retrieved from localStorage, update the todos array to it
+    if (storedHS !== null) {
+      hs = storedHS;
+    }
+};
+
+highscoreEl.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var name = inputEl.value
+    if (name === "") {
+        return;
+    }
+    thing = name + " - " + secsLeft;
+    hs.push(thing);
+    inputEl.value = "";
+
+    localStorage.setItem("highscores", JSON.stringify(hs));
+    switchPage(pgEndGood, pgHighscore);
+});
+
+// highscores
+
+init()
 
 // 
