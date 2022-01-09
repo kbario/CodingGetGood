@@ -5,16 +5,54 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Good Coding Quiz</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <header>
-
+        <a id="c_hs">View Highscores</a>
+        <span id="timer">0</span>
     </header>
     <main>
+        <section id="home-page">
+            <h1>Code Theory Challenge</h1>
+            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalise your score/time by ten seconds</p>
+            <button id="start-btn">Start Quiz</button>
+        </section>
 
+        <section id="question-page" class="hidded">
+            <h1 id="question"></h1>
+            <ul id="choices-list"></ul>
+            <p id="feedback"></p>
+        </section>
+
+        <section id="end-page-good" class="hidded">
+            <h1>Congratulations!</h1>
+            <p>Your Score was <span id="spanScore"></span>!</p>
+            <input type="text" placeholder="Enter your name..." id="input-player-name">
+            <button id="submit-highscore-btn" type="submit">Sumbit your score!</button>
+        </section>
+
+        <section id="end-page-bad" class="hidded">
+            <h1>Time is up!</h1>
+            <p>Better luck next time :)</p>
+            <div id="buttons">
+                <button id="home-btn">Home</button>
+                <button id="try-again-btn">Try Again</button>
+            </div>
+        </section>
+
+        <section id="highscore-page" class="hidded">
+            <h1>Highscores</h1>
+            <ul id="highscoresList"></ul>
+        </section>
     </main>
     <footer>
-        
+
     </footer>
+    <script src="./js/questions.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>

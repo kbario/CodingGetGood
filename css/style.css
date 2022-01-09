@@ -1,0 +1,58 @@
+/* general */
+h1, p, button{
+    margin: 10px;
+}
+
+.hidded {
+    display: none;
+}
+.true-false {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+.true {
+    background-color: limegreen;
+    color: white;
+}
+.false {
+    background-color: red;
+    color: white;
+}
+.multiple-choice {
+    flex-direction: column;
+}
+
+/* header styling */
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#timer {
+    border: 1px solid black;
+    border-radius: 3px;
+}
+#buttons {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* main styling */
+main {
+    max-width: 800px;
+    width: 80%;
+    min-width: 500px;
+    border: 1px solid black;
+    margin: auto;
+    text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+    main {
+        width: 100%;
+        min-width: 0;
+    }
+}
