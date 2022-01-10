@@ -38,6 +38,7 @@ var feedbackTime = 1;
 var time;
 var ones;
 
+// a function to covert a number to a asthetic time to input into timer
 function timeFormat(number) {
     if (number>=130){
         ones = number-120
@@ -92,7 +93,7 @@ function checkAnswer(event) {
     event.preventDefault();
     event.stopPropagation();
     var isCorrect = event.target.getAttribute('data-is-correct') === 'true';
-
+    // if answer is correct, show correct in feedback element
     if (isCorrect) {
         var fedbak = document.createElement('p');
         fedbak.textContent = "Correct! :D";
@@ -101,6 +102,7 @@ function checkAnswer(event) {
             feedbackEl.removeChild(fedbak);
         }, 1000)
     } 
+    // if answer is incorrect, show wrong in feedback element and subtract 10 secs from time left
     if (!isCorrect) {
         secsLeft = secsLeft - 10;
         var fedbak = document.createElement('p');
@@ -110,8 +112,11 @@ function checkAnswer(event) {
             feedbackEl.removeChild(fedbak);
         }, 1000);
     }
+    // increase question to move to next question
     currentQuestion++;
+    // check if current question is the last question
     if (currentQuestion >= questions.length){
+        // if time is less than zero, score should not be submited
         if (secsLeft < 0) {
             secsLeft = gameTime;
             currentQuestion = 0;
@@ -119,9 +124,11 @@ function checkAnswer(event) {
             clearInterval(window.timeInterval);
             switchPage(pgQuestion, pgEndBad);
         } else {
+            // else score can be added to local storage
             endGame();
         }
     } else {
+        // else keep going through the questions
         renderQuestion(currentQuestion);
     }
 };
@@ -205,14 +212,14 @@ btnHome2.addEventListener('click', function(event) {
     event.stopPropagation();
     switchPage(pgHighscore, pgHome);
 });
-
+// button to send the user home from good ending page
 btnHome3.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
     switchPage(pgEndGood, pgHome);
 });
 
-
+//  function to compare scores and order them
 function compare( obj1, obj2 ) {
 // compare the objects based on personName property
     if ( obj1.score < obj2.score ){
@@ -224,8 +231,10 @@ function compare( obj1, obj2 ) {
     return 0;
 };
 
+// creation of high score array
 var hs = [];
 
+// a function run on page load to retrieve any scores stored in local storage
 function init() {
     // Get stored todos from localStorage
     var storedHS = JSON.parse(localStorage.getItem("highscores"));
@@ -237,6 +246,7 @@ function init() {
     timerEl.textContent = timeFormat(gameTime);
 };
 
+// function to render high scores from local storage
 function renderHighscores() {
     storedHS = JSON.parse(localStorage.getItem("highscores"));
     if (storedHS === null) {
@@ -257,6 +267,7 @@ function renderHighscores() {
     
 };
 
+//  button to submit name and highscore to local storage
 btnSubmitHighscore.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -276,6 +287,7 @@ btnSubmitHighscore.addEventListener('click', function(event) {
     renderHighscores();
 });
 
+// button to clear local storage
 btnClearHighscores.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -284,6 +296,7 @@ btnClearHighscores.addEventListener('click', function(event) {
     renderHighscores();
 });
 
+// button to move to high score page from any page in the app
 btnHomeHighscores.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
