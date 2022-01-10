@@ -31,7 +31,7 @@
         <section id="end-page-good" class="hidded">
             <h1>Congratulations!</h1>
             <p>Your Score was <span id="spanScore"></span>!</p>
-            <form id="hs-form">
+            <form>
                 <input type="text" placeholder="Enter your name..." id="input-player-name">
                 <button id="submit-highscore-btn" type="submit">Sumbit your score!</button>
             </form>
@@ -40,15 +40,21 @@
         <section id="end-page-bad" class="hidded">
             <h1>Time is up!</h1>
             <p>Better luck next time :)</p>
-            <div id="buttons">
-                <button id="home-btn">Home</button>
-                <button id="try-again-btn">Try Again</button>
+            <div class="buttons">
+                <button id="home-btn1">Home</button>
+                <button id="try-again-btn1">Try Again</button>
             </div>
         </section>
 
         <section id="highscore-page" class="hidded">
             <h1>Highscores</h1>
+            <p id="no-highs"></p>
             <ul id="highscoresList"></ul>
+            <div id="buttons-high">
+                <button id="home-btn2">Home</button>
+                <button id="try-again-btn2">Try Again</button>
+                <button id="clear-highscore-btn">Clear Highscores</button>
+            </div>
         </section>
     </main>
     <footer>

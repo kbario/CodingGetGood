@@ -4,17 +4,28 @@ var pgQuestion = document.getElementById("question-page");
 var pgEndGood = document.getElementById("end-page-good");
 var pgEndBad = document.getElementById("end-page-bad");
 var pgHighscore = document.getElementById('highscore-page');
+
 // define elements
+    // Home
 var timerEl = document.getElementById("timer");
 var btnStartEl = document.getElementById("start-btn");
+    // question page
 var questionEl = document.getElementById('question');
 var choicesList = document.getElementById('choices-list');
 var feedbackEl = document.getElementById('feedback');
+    // good end page
 var spanScore = document.getElementById('spanScore');
-var btnTryAgain = document.getElementById('try-again-btn');
-var highscoreEl = document.getElementById('hs-form');
-var btnHome = document.getElementById('home-btn');
-var inputEl = document.getElementById("input-player-name");
+var btnSubmitHighscore = document.getElementById('submit-highscore-btn');
+var inputNameEl = document.getElementById("input-player-name");
+    // bad end page
+var btnTryAgain1 = document.getElementById('try-again-btn1');
+var btnHome1 = document.getElementById('home-btn1');
+    // highscore page
+var noHighscoreEl = document.getElementById('no-highs');
+var btnClearHighscores = document.getElementById('clear-highscore-btn');
+var btnTryAgain2 = document.getElementById('try-again-btn2');
+var btnHome2 = document.getElementById('home-btn2');
+var highscoreListEl = document.getElementById('highscoresList');
 
 
 // global variables
@@ -113,7 +124,7 @@ btnStartEl.addEventListener('click', function(event) {
 });
 
 // try again button that starts the quiz again
-btnTryAgain.addEventListener('click', function(event) {
+btnTryAgain1.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
     currentQuestion = 0
@@ -123,11 +134,39 @@ btnTryAgain.addEventListener('click', function(event) {
 });
 
 // button that sends the user to the inital home page after failing the quiz
-btnHome.addEventListener('click', function(event) {
+btnHome1.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
     switchPage(pgEndBad, pgHome);
 });
+
+// try again button that starts the quiz again
+btnTryAgain2.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    currentQuestion = 0
+    switchPage(pgHighscore, pgQuestion);
+    countDown(event);
+    renderQuestion(currentQuestion);
+});
+
+// button that sends the user to the inital home page after failing the quiz
+btnHome2.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    switchPage(pgHighscore, pgHome);
+});
+
+function compare( obj1, obj2 ) {
+// compare the objects based on personName property
+    if ( obj1.score < obj2.score ){
+        return 1;
+    };
+    if ( obj1.score > obj2.score ){
+        return -1;
+    };
+    return 0;
+};
 
 var hs = [];
 
@@ -141,23 +180,53 @@ function init() {
     }
 };
 
-highscoreEl.addEventListener('click', function(event) {
+function renderHighscores() {
+    storedHS = JSON.parse(localStorage.getItem("highscores"));
+    if (storedHS === null) {
+        noHighscoreEl.textContent = "There are no highscores right now. Give the quiz a go to top the leaderboard!";
+        highscoreListEl.textContent = "";
+    } else {
+        noHighscoreEl.textContent = "";
+        highscoreListEl.textContent = "";
+        hs = storedHS.sort(compare);
+        for (var i = 0; i < hs.length; i++) {
+            score = hs[i];
+            var li = document.createElement('li');
+            li.textContent = score.name + " - " + score.score;
+            highscoreListEl.appendChild(li);
+        }
+    }
+    
+};
+
+btnSubmitHighscore.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    var name = inputEl.value
+    var name = inputNameEl.value
     if (name === "") {
         return;
     }
-    thing = name + " - " + secsLeft;
+    thing = {
+        name: name,
+        score: secsLeft
+    }
     hs.push(thing);
-    inputEl.value = "";
+    inputNameEl.value = "";
 
     localStorage.setItem("highscores", JSON.stringify(hs));
     switchPage(pgEndGood, pgHighscore);
+    renderHighscores();
 });
 
-// highscores
+btnClearHighscores.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    localStorage.clear();
+    hs = [];
+    renderHighscores();
+})
+
+
 
 init()
 
-// 
