@@ -13,7 +13,7 @@ var questions = [
         ]
     }, {
         type: "multiple-choice",
-        question: "What data type can contain a true or false value?",
+        question: "What data type can only contain true or false values?",
         answers: [
             {
                 answer: "Strings", 
@@ -53,7 +53,7 @@ var questions = [
         answers: [
             {
                 answer: "object.property = value", 
-                isCorrect: "True"
+                isCorrect: "true"
             }, {
                 answer: "object.property(value)", 
                 isCorrect: "false"
@@ -67,7 +67,7 @@ var questions = [
         ]
     }, {
         type: "true/false",
-        question: "Is `flex-direction: column` the default setting?",
+        question: "Is 'column' the default setting of flex-direction?",
         answers: [
             {
                 answer: "true", 

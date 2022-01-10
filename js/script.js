@@ -9,6 +9,7 @@ var pgHighscore = document.getElementById('highscore-page');
     // Home
 var timerEl = document.getElementById("timer");
 var btnStartEl = document.getElementById("start-btn");
+var btnHomeHighscores = document.getElementById("c_hs");
     // question page
 var questionEl = document.getElementById('question');
 var choicesList = document.getElementById('choices-list');
@@ -17,6 +18,7 @@ var feedbackEl = document.getElementById('feedback');
 var spanScore = document.getElementById('spanScore');
 var btnSubmitHighscore = document.getElementById('submit-highscore-btn');
 var inputNameEl = document.getElementById("input-player-name");
+var btnHome3 = document.getElementById("home-btn3");
     // bad end page
 var btnTryAgain1 = document.getElementById('try-again-btn1');
 var btnHome1 = document.getElementById('home-btn1');
@@ -29,17 +31,39 @@ var highscoreListEl = document.getElementById('highscoresList');
 
 
 // global variables
-var currentQuestion = 0
-var secsLeft = 60
-var feedbackTime = 1
+var gameTime = 60;
+var currentQuestion = 0;
+var secsLeft = gameTime;
+var feedbackTime = 1;
+var time;
+var ones;
+
+function timeFormat(number) {
+    if (number>=130){
+        ones = number-120
+        return time = "2:" + ones
+    } else if (number>=120){
+        ones = number-120
+        return time = "2:0" + ones
+    } else if (number>=70){
+        ones = number-60
+        return time = "1:" + ones
+    } else if (number>=60) {
+        ones = number-60
+        return time = "1:0" + ones
+    } else if (number>=10) {
+        return time = "0:" + number
+    } else {
+        return time = "0:0" + number
+    }
+};
 
 // start timer function
 function countDown() {
-    secsLeft = 60
-    timerEl.textContent = secsLeft;
+    timerEl.textContent = timeFormat(secsLeft);
     window.timeInterval = setInterval(function() {
         secsLeft--;
-        timerEl.textContent = secsLeft;
+        timerEl.textContent = timeFormat(secsLeft);
         if (secsLeft === 0) {
             clearInterval(window.timeInterval);
             switchPage(pgQuestion, pgEndBad);
@@ -55,9 +79,12 @@ function switchPage(pageHide, pageShow) {
 
 // end the quiz and move to the good end page
 function endGame() {
+    score = secsLeft;
+    secsLeft = gameTime;
+    currentQuestion = 0;
     switchPage(pgQuestion, pgEndGood);
     clearInterval(window.timeInterval);
-    spanScore.textContent = secsLeft
+    spanScore.textContent = score;
 };
 
 // check the answer clicked on by the user and move to next question or end game
@@ -66,15 +93,36 @@ function checkAnswer(event) {
     event.stopPropagation();
     var isCorrect = event.target.getAttribute('data-is-correct') === 'true';
 
-    // if (isCorrect) {
-    // } else {
-
-    // }
+    if (isCorrect) {
+        var fedbak = document.createElement('p');
+        fedbak.textContent = "Correct! :D";
+        feedbackEl.appendChild(fedbak);
+        setTimeout(function() {
+            feedbackEl.removeChild(fedbak);
+        }, 1000)
+    } 
+    if (!isCorrect) {
+        secsLeft = secsLeft - 10;
+        var fedbak = document.createElement('p');
+        fedbak.textContent = "Wrong :/";
+        feedbackEl.appendChild(fedbak);
+        setTimeout(function() {
+            feedbackEl.removeChild(fedbak);
+        }, 1000);
+    }
     currentQuestion++;
     if (currentQuestion >= questions.length){
-        endGame()
+        if (secsLeft < 0) {
+            secsLeft = gameTime;
+            currentQuestion = 0;
+            timerEl.textContent = timeFormat(0);
+            clearInterval(window.timeInterval);
+            switchPage(pgQuestion, pgEndBad);
+        } else {
+            endGame();
+        }
     } else {
-        renderQuestion(currentQuestion)
+        renderQuestion(currentQuestion);
     }
 };
 
@@ -94,6 +142,8 @@ function renderQuestion(index) {
             var btn = document.createElement('btn');
             btn.textContent = question.answers[i].answer;
             btn.setAttribute('data-is-correct', question.answers[i].isCorrect);
+            btn.setAttribute('class', 'btn-option')
+            btn.setAttribute('id', question.answers[i].answer);
             btn.addEventListener('click', checkAnswer);
             li.appendChild(btn);
             choicesList.appendChild(li);
@@ -103,9 +153,11 @@ function renderQuestion(index) {
         choicesList.classList.add('multiple-choice');
         for (var i = 0; i < question.answers.length; i++) {
             var li = document.createElement('li');
+            li.setAttribute('class', 'multiLi')
             var btn = document.createElement('btn');
             btn.textContent = question.answers[i].answer;
             btn.setAttribute('data-is-correct', question.answers[i].isCorrect);
+            btn.setAttribute('class', 'btn-option');
             btn.addEventListener('click', checkAnswer);
             li.appendChild(btn);
             choicesList.appendChild(li);
@@ -117,9 +169,8 @@ function renderQuestion(index) {
 btnStartEl.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    currentQuestion = 0
     switchPage(pgHome, pgQuestion);
-    countDown(event);
+    countDown();
     renderQuestion(currentQuestion);
 });
 
@@ -127,9 +178,8 @@ btnStartEl.addEventListener('click', function(event) {
 btnTryAgain1.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    currentQuestion = 0
     switchPage(pgEndBad, pgQuestion);
-    countDown(event);
+    countDown();
     renderQuestion(currentQuestion);
 });
 
@@ -144,9 +194,8 @@ btnHome1.addEventListener('click', function(event) {
 btnTryAgain2.addEventListener('click', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    currentQuestion = 0
     switchPage(pgHighscore, pgQuestion);
-    countDown(event);
+    countDown();
     renderQuestion(currentQuestion);
 });
 
@@ -156,6 +205,13 @@ btnHome2.addEventListener('click', function(event) {
     event.stopPropagation();
     switchPage(pgHighscore, pgHome);
 });
+
+btnHome3.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    switchPage(pgEndGood, pgHome);
+});
+
 
 function compare( obj1, obj2 ) {
 // compare the objects based on personName property
@@ -178,6 +234,7 @@ function init() {
     if (storedHS !== null) {
       hs = storedHS;
     }
+    timerEl.textContent = timeFormat(gameTime);
 };
 
 function renderHighscores() {
@@ -192,6 +249,7 @@ function renderHighscores() {
         for (var i = 0; i < hs.length; i++) {
             score = hs[i];
             var li = document.createElement('li');
+            li.classList.add('highLi')
             li.textContent = score.name + " - " + score.score;
             highscoreListEl.appendChild(li);
         }
@@ -208,7 +266,7 @@ btnSubmitHighscore.addEventListener('click', function(event) {
     }
     thing = {
         name: name,
-        score: secsLeft
+        score: score
     }
     hs.push(thing);
     inputNameEl.value = "";
@@ -224,9 +282,23 @@ btnClearHighscores.addEventListener('click', function(event) {
     localStorage.clear();
     hs = [];
     renderHighscores();
-})
+});
 
-
+btnHomeHighscores.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    clearInterval(window.timeInterval);
+    score = secsLeft;
+    secsLeft = gameTime;
+    currentQuestion = 0;
+    pgHome.classList.add('hidded');
+    pgQuestion.classList.add('hidded');
+    pgEndGood.classList.add('hidded');
+    pgEndBad.classList.add('hidded');
+    pgHome.classList.add('hidded');
+    pgHighscore.classList.remove('hidded');
+    renderHighscores();
+});
 
 init()
 

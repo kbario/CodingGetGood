@@ -9,23 +9,30 @@
     <!-- css -->
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
-        <a id="c_hs">View Highscores</a>
-        <span id="timer">0</span>
+        <button id="c_hs">View Highscores</button>
+        <span id="timer"></span>
     </header>
     <main>
         <section id="home-page">
-            <h1>Code Theory Challenge</h1>
-            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalise your score/time by ten seconds</p>
+            <h1>Coding Quiz</h1>
+            <p>Try and answer all the code-related questions in 60 seconds.</p>
+            <p>Be careful though, 10 seconds is deducted from your time for each wrong answer.</p>
+            <p>Good Luck!</p>
             <button id="start-btn">Start Quiz</button>
         </section>
 
         <section id="question-page" class="hidded">
             <h1 id="question"></h1>
             <ul id="choices-list"></ul>
-            <p id="feedback"></p>
         </section>
 
         <section id="end-page-good" class="hidded">
@@ -35,6 +42,7 @@
                 <input type="text" placeholder="Enter your name..." id="input-player-name">
                 <button id="submit-highscore-btn" type="submit">Sumbit your score!</button>
             </form>
+            <button id="home-btn3">Home</button>
         </section>
 
         <section id="end-page-bad" class="hidded">
@@ -49,13 +57,14 @@
         <section id="highscore-page" class="hidded">
             <h1>Highscores</h1>
             <p id="no-highs"></p>
-            <ul id="highscoresList"></ul>
-            <div id="buttons-high">
+            <ol id="highscoresList"></ol>
+            <div class="buttons" id="buttons-high">
                 <button id="home-btn2">Home</button>
                 <button id="try-again-btn2">Try Again</button>
                 <button id="clear-highscore-btn">Clear Highscores</button>
             </div>
         </section>
+        <div id="feedback"></div>
     </main>
     <footer>
 
